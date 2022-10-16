@@ -21,11 +21,11 @@ always @(posedge clk) begin
     else begin
         if(count==tick_gen) begin
           count=0;
-          tick<=~tick;
+          tick<=1'b1;
         end
         else begin
             count=count+1;
-            tick<=tick;
+            tick<=1'b0;
         end
    // tick=~tick;
     end
