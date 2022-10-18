@@ -23,13 +23,14 @@ BaudTickGen #(ClkFrequency, Baud, Oversampling) tickgen(.clk(clk), .enable(RxD_b
 assign RxD_busy = ~RxD_data_ready;
 
 always @(posedge clk) begin
-    if(rst) RxD_data_ready=0;
+    RxD_data_ready <= 1'b0;
+    if(rst) begin RxD_data_ready<=1'b0; RxD_state <= 4'b0000;RxD_data<=0; end
     else begin
     if(count==Oversampling-1)begin count<=0;end
 
     if (RxDTick & count<Oversampling-1) begin
         count<=count+1;
-        RxD_data_ready <= 1'b0;
+        
     end
     if(RxDTick & count==Oversampling/2) begin
       
@@ -48,7 +49,7 @@ always @(posedge clk) begin
         4'b1000:  begin RxD_state <= 4'b1001; RxD_data[6] <= RxD; end  // bit 6
         4'b1001:  begin RxD_state <= 4'b1010; RxD_data[7] <= RxD; end  // bit 7
         4'b1010:  begin RxD_state <= 4'b0000; RxD_data_ready <= 1'b1; end  // data ready
-        4'b1011:  RxD_state <= 4'b0000;
+       // 4'b1011:  RxD_state <= 4'b0000;
         default: RxD_state <= 4'b0000;
       endcase  
     end
