@@ -310,7 +310,7 @@ wire [7:0] RxD_data;
 );*/
 
 //async_transmitter TX(.clk(CLOCK_50),.TxD_start(SW[0]),.TxD_data(TxD_data),.TxD(UART_TXD),.TxD_busy(LEDR[0]));
-async_receiver RX(.clk(CLOCK_50),.RxD(UART_RXD),.RxD_data_ready(LEDR[2]),.RxD_data(RxD_data));
+async_receiver RX(.rst(SW[0]),.clk(CLOCK_50),.RxD(UART_RXD),.RxD_data_ready(LEDR[2]),.RxD_data(RxD_data));
 assign LEDR[1] = SW[2] | SW[1];
 assign LEDR[17:10]=RxD_data;
 endmodule

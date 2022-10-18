@@ -1,4 +1,5 @@
 module async_receiver(
+    input rst,
     input clk,
     input RxD,
     output reg RxD_data_ready,
@@ -22,18 +23,21 @@ BaudTickGen #(ClkFrequency, Baud, Oversampling) tickgen(.clk(clk), .enable(RxD_b
 assign RxD_busy = ~RxD_data_ready;
 
 always @(posedge clk) begin
-    if(count==Oversampling-1) count<=0;
+    if(rst) RxD_data_ready=0;
+    else begin
+    if(count==Oversampling-1)begin count<=0;end
 
     if (RxDTick & count<Oversampling-1) begin
         count<=count+1;
+        RxD_data_ready <= 1'b0;
     end
     if(RxDTick & count==Oversampling/2) begin
-      RxD_data_ready <= 1'b0;
+      
       //count<=count+1;
       //  RxD_data[bit_num]<=RxD;
       //  bit_num<=bit_num+1;
       case(RxD_state)
-        4'b0000: begin if(!RxD) RxD_state <= 4'b0001; end  // start bit
+        4'b0000: begin if(!RxD) RxD_state <= 4'b0001; RxD_data_ready <= 1'b0; end  // start bit
         4'b0001: RxD_state <= 4'b0010; // start bit
         4'b0010:  begin RxD_state <= 4'b0011; RxD_data[0] <= RxD; end // bit 0
         4'b0011:  begin RxD_state <= 4'b0100; RxD_data[1] <= RxD; end  // bit 1
@@ -47,6 +51,7 @@ always @(posedge clk) begin
         4'b1011:  RxD_state <= 4'b0000;
         default: RxD_state <= 4'b0000;
       endcase  
+    end
     end
 end
 
