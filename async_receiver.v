@@ -1,7 +1,7 @@
 module async_receiver(
     input clk,
     input RxD,
-    output reg RxD_data_ready = 0,
+    output reg RxD_data_ready,
     output reg [7:0] RxD_data = 0  // data received, valid only (for one clock cycle) when RxD_data_ready is asserted
 );
 
@@ -28,6 +28,7 @@ always @(posedge clk) begin
         count<=count+1;
     end
     if(RxDTick & count==Oversampling/2) begin
+      RxD_data_ready <= 1'b0;
       //count<=count+1;
       //  RxD_data[bit_num]<=RxD;
       //  bit_num<=bit_num+1;
