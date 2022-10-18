@@ -12,7 +12,7 @@ parameter Oversampling = 4;	// needs to be a power of 2
 ////////////////////////////////
 //place your code here
 wire RxDTick,RxD_busy;
-reg [1:0] count;
+reg [1:0] count=0;
 //reg [2:0] bit_num=0;
 reg [3:0] RxD_state = 0;
 BaudTickGen #(ClkFrequency, Baud, Oversampling) tickgen(.clk(clk), .enable(RxD_busy), .tick(RxDTick));
@@ -27,7 +27,8 @@ always @(posedge clk) begin
     if (RxDTick & count<Oversampling-1) begin
         count<=count+1;
     end
-    else if(RxDTick & count==Oversampling/2) begin
+    if(RxDTick & count==Oversampling/2) begin
+      //count<=count+1;
       //  RxD_data[bit_num]<=RxD;
       //  bit_num<=bit_num+1;
       case(RxD_state)

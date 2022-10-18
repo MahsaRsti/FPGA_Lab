@@ -19,7 +19,7 @@ end
 always @(posedge clk) begin
     if(!enable) tick=1'b0;
     else begin
-        if(count==tick_gen) begin
+        if(count==tick_gen-1) begin
           count=0;
           tick<=1'b1;
         end
