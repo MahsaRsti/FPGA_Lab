@@ -17,9 +17,32 @@ parameter Oversampling = 4;
 //Place your controller here
 // transmitter_cntrlr TX_CU(.clk(CLOCK_50),.rst(KEY),output_valid,TX_busy,TX_start);
 
- //reciever_cntrlr RX_CU(.clk(CLOCK_50),.rst(KEY),data_ready,input_valid,output_valid);
+ reciever_cntrlr RX_CU(.clk(CLOCK_50),.rst(KEY),data_ready,input_valid,output_valid);
 
  async_transmitter TX(.clk(CLOCK_50),TxD_start,TxD_data,TxD,TxD_busy);
+
+ //FIR 
+ wire ff1_Sel,ff2_Sel;
+ reg [15:0] ff1, ff2;
+ wire [7:0] uart_in,uart_out;
+ always @(posedge clk) begin
+    if(rst) begin ff1 <= 0; ff2 <= 0; end
+    else begin
+        if(ff1_load)begin
+            if(ff1_Sel)
+                ff1[15:8]=uart_in;
+            else
+                ff1[7:0]=uart_in;
+        end
+        if(ff2_load)
+            ff1=FIR_out;
+        if(ff2_Sel)
+            uart_out=ff1[15:8];
+        else
+            uart_out=ff1[7:0];
+    end
+    
+ end
 
 // async_receiver RX(.clk(CLOCK_50),RxD,RxD_data_ready = 0,RxD_data = 0);
 ////////////////////////////////
