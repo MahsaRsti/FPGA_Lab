@@ -26,13 +26,13 @@ always @(posedge clk) begin
     RxD_data_ready <= 1'b0;
     if(rst) begin RxD_data_ready<=1'b0; RxD_state <= 4'b0000;RxD_data<=0; end
     else begin
-    if(count==Oversampling-1)begin count<=0;end
+    if( RxDTick & count==Oversampling-1)begin count<=0;end
 
-    if (RxDTick & count<Oversampling-1) begin
+    if (RxDTick & count<Oversampling) begin
         count<=count+1;
         
     end
-    if(RxDTick & count==Oversampling/2) begin
+    if(RxDTick & count==Oversampling/2 -1) begin
       
       //count<=count+1;
       //  RxD_data[bit_num]<=RxD;

@@ -68,8 +68,8 @@ module TB
 		LEDG,							//	LED Green[8:0]
 		LEDR,							//	LED Red[17:0]
 		////////////////////////	UART	////////////////////////
-		//UART_TXD,						//	UART Transmitter
-		UART_RXD,						//	UART Receiver
+		UART_TXD,						//	UART Transmitter
+		//UART_RXD,						//	UART Receiver
 		////////////////////////	IRDA	////////////////////////
 		//IRDA_TXD,						//	IRDA Transmitter
 		//IRDA_RXD,						//	IRDA Receiver
@@ -196,8 +196,8 @@ output	[6:0]	HEX7;					//	Seven Segment Digit 7
 output	[8:0]	LEDG;					//	LED Green[8:0]
 output  [17:0]	LEDR;					//	LED Red[17:0]
 ////////////////////////////	UART	////////////////////////////
-//output			UART_TXD;				//	UART Transmitter
-input			   UART_RXD;				//	UART Receiver
+output			UART_TXD;				//	UART Transmitter
+//input			   UART_RXD;				//	UART Receiver
 ////////////////////////////	IRDA	////////////////////////////
 //output			IRDA_TXD;				//	IRDA Transmitter
 //input			   IRDA_RXD;				//	IRDA Receiver
@@ -302,17 +302,17 @@ input          TD_CLK27;            //	TV Decoder 27MHz CLK
 inout	[35:0]	GPIO_0;					//	GPIO Connection 0
 inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 
-//wire [7:0] TxD_data=8'h44;
-wire [7:0] RxD_data;
+wire [7:0] TxD_data;//=8'h44;
+// wire [7:0] RxD_data=8'b10101010;
 /*RISC_v CPU(
     .reset(SW[3]),
     .clock(CLOCK_50)
 );*/
 
-//async_transmitter TX(.clk(CLOCK_50),.TxD_start(SW[0]),.TxD_data(TxD_data),.TxD(UART_TXD),.TxD_busy(LEDR[0]));
-async_receiver RX(.rst(SW[0]),.clk(CLOCK_50),.RxD(UART_RXD),.RxD_data_ready(LEDR[2]),.RxD_data(RxD_data));
+async_transmitter TX(.clk(CLOCK_50),.TxD_start(SW[0]),.TxD_data(TxD_data),.TxD(UART_TXD),.TxD_busy(LEDR[2]));
+async_receiver RX(.rst(SW[1]),.clk(CLOCK_50),.RxD(UART_RXD),.RxD_data_ready(LEDR[3]),.RxD_data(TxD_data));
 assign LEDR[1] = SW[2] | SW[1];
-assign LEDR[17:10]=RxD_data;
+// assign LEDR[17:10]=RxD_data;
 endmodule
 
 
