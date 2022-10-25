@@ -8,7 +8,7 @@ module async_receiver(
 
 parameter ClkFrequency = 50000000;
 parameter Baud = 115200;
-parameter Oversampling = 4;	// needs to be a power of 2
+parameter Oversampling = 4;  // needs to be a power of 2
 
 ////////////////////////////////
 //place your code here
@@ -26,20 +26,20 @@ always @(posedge clk) begin
     RxD_data_ready <= 1'b0;
     if(rst) begin RxD_data_ready<=1'b0; RxD_state <= 4'b0000;RxD_data<=0; end
     else begin
-    if( RxDTick & count==Oversampling-1)begin count<=0;end
+    if(count==Oversampling)begin count<=0;end
 
     if (RxDTick & count<Oversampling) begin
         count<=count+1;
         
     end
-    if(RxDTick & count==Oversampling/2 -1) begin
+    if(RxDTick & count==Oversampling/2-1) begin
       
       //count<=count+1;
       //  RxD_data[bit_num]<=RxD;
       //  bit_num<=bit_num+1;
       case(RxD_state)
-        4'b0000: begin if(!RxD) RxD_state <= 4'b0001; RxD_data_ready <= 1'b0; end  // start bit
-        4'b0001: RxD_state <= 4'b0010; // start bit
+        4'b0000: begin if(!RxD) RxD_state <= 4'b0010; RxD_data_ready <= 1'b0; end  // start bit
+        // 4'b0001: RxD_state <= 4'b0010; // start bit
         4'b0010:  begin RxD_state <= 4'b0011; RxD_data[0] <= RxD; end // bit 0
         4'b0011:  begin RxD_state <= 4'b0100; RxD_data[1] <= RxD; end  // bit 1
         4'b0100:  begin RxD_state <= 4'b0101; RxD_data[2] <= RxD; end // bit 2
