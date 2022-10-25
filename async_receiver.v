@@ -8,7 +8,7 @@ module async_receiver(
 
 parameter ClkFrequency = 50000000;
 parameter Baud = 115200;
-parameter Oversampling = 4;	// needs to be a power of 2
+parameter Oversampling = 4;  // needs to be a power of 2
 
 ////////////////////////////////
 //place your code here
