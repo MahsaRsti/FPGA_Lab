@@ -1,4 +1,4 @@
-module rec_cu(input TxD_busy,clk,rst,FIR_valid,ff2_Sel,ff2_load,TxD_start);
+module trn_cu(input TxD_busy,clk,rst,FIR_valid,ff2_Sel,ff2_load,TxD_start);
 input clk,rst,FIR_valid;
 output reg ff2_Sel,ff2_load,TxD_start;
 

@@ -16,17 +16,34 @@ parameter Oversampling = 4;
 ////////////////////////////////
 //Place your controller here
 // transmitter_cntrlr TX_CU(.clk(CLOCK_50),.rst(KEY),output_valid,TX_busy,TX_start);
+wire input_valid,output_valid,TxD_busy,TxD_start,RxD_ready;
+wire [15:0]FIR_input;
+wire [37:0]FIR_output;
+FIR FF #(parameter inwidth=16,outwidth=38,coefnum=64,logcoefnum=6)(CLOCK_50,KEY,input_valid,FIR_input,output_valid,FIR_output);
+trn_cu  CU1 (TxD_busy,CLOCK_50,KEY,output_valid,ff2_Sel,ff2_load,TxD_start);
+rec_cu  CU2 (RxD_ready,CLOCK_50,KEY,ff1_Sel,ff1_load,input_valid);
+async_receiver AR(
+    KEY,
+    CLOCK_50,
+    UART_RXD,
+    RxD_ready,
+    uart_in  // data received, valid only (for one clock cycle) when RxD_data_ready is asserted
+);
 
- reciever_cntrlr RX_CU(.clk(CLOCK_50),.rst(KEY),data_ready,input_valid,output_valid);
-
- async_transmitter TX(.clk(CLOCK_50),TxD_start,TxD_data,TxD,TxD_busy);
+async_transmitter AT(
+    CLOCK_50,
+    TxD_start,
+    uart_out,
+    UART_TXD,
+    TxD_busy
+);
 
  //FIR 
- wire ff1_Sel,ff2_Sel;
+ wire ff1_Sel,ff2_Sel,ff2_load,ff1_load;
  reg [15:0] ff1, ff2;
  wire [7:0] uart_in,uart_out;
- always @(posedge clk) begin
-    if(rst) begin ff1 <= 0; ff2 <= 0; end
+ always @(posedge CLOCK_50) begin
+    if(KEY) begin ff1 <= 0; ff2 <= 0; end
     else begin
         if(ff1_load)begin
             if(ff1_Sel)
@@ -35,7 +52,7 @@ parameter Oversampling = 4;
                 ff1[7:0]=uart_in;
         end
         if(ff2_load)
-            ff1=FIR_out;
+            ff1=FIR_output[23:8];
         if(ff2_Sel)
             uart_out=ff1[15:8];
         else
