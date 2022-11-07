@@ -1,5 +1,5 @@
-module trn_cu(input TxD_busy,clk,rst,FIR_valid,ff2_Sel,ff2_load,TxD_start);
-input clk,rst,FIR_valid;
+module trn_cu(TxD_busy,clk,rst,FIR_valid,ff2_Sel,ff2_load,TxD_start);
+input TxD_busy,clk,rst,FIR_valid;
 output reg ff2_Sel,ff2_load,TxD_start;
 
 reg [1:0]ns,ps;
@@ -30,4 +30,6 @@ always@(posedge clk) begin
     load_res:{ff2_Sel,TxD_start}=2'b11;
     get_lsb:{TxD_start}=1'b0;
     get_msb:{ff2_Sel,TxD_start}=2'b01;
+    endcase
+end
 endmodule
