@@ -1,6 +1,6 @@
-module rec_cu(input RxD_ready,clk,rst,ff1_Sel,ff1_load,FIR_strt);
-input clk,rst;
-output reg ff1_load,ff1_load,FIR_strt;
+module rec_cu(RxD_ready,clk,rst,ff1_Sel,ff1_load,FIR_strt);
+input RxD_ready,clk,rst;
+output reg ff1_Sel,ff1_load,FIR_strt;
 
 reg [1:0]ns,ps;
 
@@ -29,4 +29,6 @@ always@(posedge clk) begin
     get_msb:{ff1_Sel,ff1_load}=2'b11;
     get_lsb:{ff1_Sel,ff1_load}=2'b01;
     input_valid:{FIR_strt}=1'b1;
+    endcase
+end
 endmodule
