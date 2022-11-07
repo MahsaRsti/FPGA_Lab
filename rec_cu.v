@@ -4,10 +4,10 @@ output reg ff1_Sel,ff1_load,FIR_strt;
 
 reg [1:0]ns,ps;
 
-parameter [2:0] idle=3'b000,
-get_msb=3'b001,
-get_lsb=3'b010,
-input_valid=3'b011;
+parameter [1:0] idle=2'b00,
+get_msb=2'b01,
+get_lsb=2'b10,
+input_valid=2'b11;
 always@(posedge clk)begin
     if(rst)
         {ff1_Sel,ff1_load,FIR_strt,ns,ps}<=0;
