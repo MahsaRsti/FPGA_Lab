@@ -44,7 +44,7 @@ async_transmitter AT(
 );
 
  //FIR 
- always @(posedge CLOCK_50) begin
+ always @(*) begin
     if(KEY) begin ff1 <= 0; ff2 <= 0; end
     else begin
         if(ff1_load)begin
