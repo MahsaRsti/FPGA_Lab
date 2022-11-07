@@ -64,6 +64,7 @@ async_transmitter AT(
  end
 
 assign uart_out=uart_out_reg;
+assign LEDR=ff1;
 // async_receiver RX(.clk(CLOCK_50),RxD,RxD_data_ready = 0,RxD_data = 0);
 ////////////////////////////////
 
