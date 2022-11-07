@@ -54,17 +54,18 @@ async_transmitter AT(
                 ff1[7:0]=uart_in;
         end
         if(ff2_load)
-            ff1=FIR_output[23:8];
+            ff2=FIR_output[23:8];
         if(ff2_Sel)
-            uart_out_reg=ff1[15:8];
+            uart_out_reg=ff2[15:8];
         else
-            uart_out_reg=ff1[7:0];
+            uart_out_reg=ff2[7:0];
     end
     
  end
 
 assign uart_out=uart_out_reg;
 assign LEDR=ff1;
+assign FIR_input=ff1;
 // async_receiver RX(.clk(CLOCK_50),RxD,RxD_data_ready = 0,RxD_data = 0);
 ////////////////////////////////
 
