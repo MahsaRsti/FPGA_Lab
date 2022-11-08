@@ -25,8 +25,8 @@ Register #(outwidth) R1(adder_out,clr_res,loadres,clock,resault);
 Adder #(outwidth) ADDER1(resault,adder_in1,,adder_out);
 Multiplier #(inwidth) mult1(coef,X_k,mult_out);
 Register #(inwidth) i0(in,reset,load,clock,X[0]);
-CoefMem #(inwidth,coefnum,logcoefnum) CM(adr,coef);
-
+// CoefMem #(inwidth,coefnum,logcoefnum) CM(adr,coef);
+coeffrom CM(adr,clock,coef);
 genvar i;
 generate
     for(i=1;i<coefnum;i=i+1) begin : regs
