@@ -10,7 +10,7 @@ get_lsb=2'b10,
 input_valid=2'b11;
 always@(posedge clk)begin
     if(rst)
-        {/*ff1_Sel,ff1_load,FIR_strt,ns,*/ps}<=0;
+        {ff1_Sel,ff1_load,FIR_strt,ns,ps}<=0;
     else begin
         ps<=ns;
     end

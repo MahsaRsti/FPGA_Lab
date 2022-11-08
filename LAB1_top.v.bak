@@ -1,4 +1,4 @@
-module TB1(CLOCK_50, KEY, SW, UART_RXD, UART_TXD, LEDR);
+module LAB1_top(CLOCK_50, KEY, SW, UART_RXD, UART_TXD, LEDR);
 
 input CLOCK_50;
 input [0:0] KEY;		//reset key

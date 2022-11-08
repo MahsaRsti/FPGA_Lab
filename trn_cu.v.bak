@@ -12,7 +12,7 @@ get_msb2=3'b100;
 
 always@(posedge clk)begin
     if(rst)
-        {/*ff2_Sel,ff2_load,TxD_start,*//*ns,*/ps}<=0;
+        {ff2_Sel,ff2_load,TxD_start,ns,ps}<=0;
     else begin
         ps<=ns;
     end
