@@ -11,7 +11,8 @@ wire TXD;
 //     RxD_data_ready,
 //     TXD  // data received, valid only (for one clock cycle) when RxD_data_ready is asserted
 // );
-LAB1_top test(clk, rst,, xD, TXD,);
+// LAB1_top test(clk, rst,, xD, TXD,);
+TB1 test(clk, rst,, xD, TXD,);
 // async_transmitter AT(
 //     clk,
 //     start,

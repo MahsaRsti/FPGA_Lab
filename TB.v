@@ -3,7 +3,7 @@ module TB(CLOCK_50, KEY, SW, UART_RXD, UART_TXD, LEDR);
 input CLOCK_50;
 input [0:0] KEY;		//reset SW
 input [3:0] SW;
-output [15:0] LEDR;
+output [16:0] LEDR;
 
 input UART_RXD;
 output UART_TXD;
@@ -24,11 +24,19 @@ wire [15:0]FIR_input;
 wire [37:0]FIR_output;
  wire ff1_Sel,ff2_Sel,ff2_load,ff1_load;
 
-FIR #(16,38,64,6) FF(CLOCK_50,SW[0],input_valid,FIR_input,output_valid,FIR_output);
-trn_cu  CU1 (TxD_busy,CLOCK_50,SW[0],output_valid,ff2_Sel,ff2_load,TxD_start);
-rec_cu  CU2 (RxD_ready,CLOCK_50,SW[0],ff1_Sel,ff1_load,input_valid);
+// FIR #(16,38,64,6) FF(CLOCK_50,SW[1],input_valid,FIR_input,output_valid,FIR_output);
+FIR ff(
+    CLOCK_50,
+    SW[1],
+    FIR_input,
+    input_valid,
+    FIR_output,
+    output_valid
+);
+trn_cu  CU1 (TxD_busy,CLOCK_50,SW[1],output_valid,ff2_Sel,ff2_load,TxD_start);
+rec_cu  CU2 (RxD_ready,CLOCK_50,SW[1],ff1_Sel,ff1_load,input_valid);
 async_receiver AR(
-    SW[0],
+    SW[1],
     CLOCK_50,
     UART_RXD,
     RxD_ready,
@@ -45,7 +53,7 @@ async_transmitter AT(
 
  //FIR 
  always @(*) begin
-    if(SW[0]) begin ff1 <= 0; ff2 <= 0; end
+    if(SW[1]) begin ff1 <= 0; ff2 <= 0; end
     else begin
         if(ff1_load)begin
             if(ff1_Sel)
@@ -64,8 +72,9 @@ async_transmitter AT(
  end
 
 assign uart_out=uart_out_reg;
-assign LEDR=ff1;
+assign LEDR[15:0]=FIR_input[15:0];
 assign FIR_input=ff1;
+assign LEDR[16]=SW[1];
 // async_receiver RX(.clk(CLOCK_50),RxD,RxD_data_ready = 0,RxD_data = 0);
 ////////////////////////////////
 

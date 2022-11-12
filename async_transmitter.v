@@ -43,7 +43,8 @@ begin
         default: if(TxDTick) TxD_state <= 4'b0000;
      endcase  
 end
-
 assign TxD = (TxD_state == 4'b0000) | ((TxD_state > 4'b0001) & TxD_shift[0]) | (TxD_state == 4'b1010);
 endmodule
+
+
 
