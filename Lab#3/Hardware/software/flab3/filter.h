@@ -1,0 +1,2 @@
+
+double filter(double in);
