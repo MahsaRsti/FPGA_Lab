@@ -1,0 +1,46 @@
+module DataPath(
+    clk,
+    rst,
+    input_valid,
+    output_valid,
+    coeff_read,
+    cnt_en,
+    cnt_rst,
+    input_data,
+    output_data,
+    cnt_cout
+);
+
+parameter   OUT_WIDTH = 48;
+parameter	DATA_LEN=221184;
+
+input clk,rst,input_valid,output_valid,coeff_read,cnt_en,cnt_rst;
+input [15:0]    input_data;
+
+output [OUT_WIDTH-1:0]   output_data [0:DATA_LEN];
+output cnt_cout;
+
+wire [5:0]  counter,output_data_cnt;
+wire [15:0] regfile_out,coeff;
+wire [31:0] res_mul;
+wire [47:0] res_sum,out_reg;
+
+Counter main_cnt(.clock(clk),.reset(rst),.cnt_en(cnt_en),.cnt_rst(cnt_rst),.cout(cnt_cout),.out_cnt(counter));
+
+Counter output_cnt(.clock(clk),.reset(rst),.cnt_en(output_valid),.cnt_rst(1'b0),.cout(),.out_cnt(output_data_cnt));
+
+RegisterFile inputs_regfile(.in_data(input_data),.rd_reg(counter),.reg_write(input_valid),.reset(rst),.clock(clk),.rd_data(regfile_out));
+
+CoeffROM  coefficients(.clock(clk),.adr(counter),.mem_r(coeff_read),.coeff(coeff));
+
+Multiplier multiplier(.a(regfile_out),.b(coeff),.result(res_mul));
+
+Adder adder(.a(res_mul),.b(out_reg),.sum(res_sum));
+
+Register out_register(.d_in(res_sum),.reset(rst),.clock(clk),.d_out(out_reg));
+
+initial begin
+	output_data[output_data_cnt]=(output_valid) ? out_reg : output_data[output_data_cnt];
+end
+
+endmodule
