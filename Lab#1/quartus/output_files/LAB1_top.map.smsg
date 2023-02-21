@@ -1,0 +1,3 @@
+Warning (10268): Verilog HDL information at counter.v(5): always construct contains both blocking and non-blocking assignments
+Warning (10268): Verilog HDL information at LAB1_top.v(48): always construct contains both blocking and non-blocking assignments
+Warning (10268): Verilog HDL information at BaudTickGen.v(19): always construct contains both blocking and non-blocking assignments
